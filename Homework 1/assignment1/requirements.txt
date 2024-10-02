@@ -1,0 +1,6 @@
+einops
+prettytable
+torch
+torchmetrics
+torchvision
+tqdm
