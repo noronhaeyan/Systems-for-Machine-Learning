@@ -102,45 +102,23 @@ class SelfAttention(nn.Module):
         ---------
             qkv: The tensor containing the query, key, and value. (B, S, 3, H, d)
         """
-        batch_size, seqlen, n_head, head_dim = (
-            qkv.shape[0],
-            qkv.shape[1],
-            qkv.shape[3],
-            qkv.shape[4],
-        )
+        batch_size, seqlen = qkv.shape[0], qkv.shape[1]
         q, k, v = qkv.unbind(dim=2)
-        q = q.transpose(1, 2)
-        k = k.transpose(1, 2)
-        v = v.transpose(1, 2)
+        
+        ######## ENTER CODE HERE ########
+        
+        softmax_scale = # TODO: compute the softmax scale
+        dot_product_scores = # TODO: compute the dot product scores
+        causal_mask = # TODO:  create a causal mask
+        dot_product_scores_masked = # TODO: mask the dot product scores
+        attention = # TODO: compute the attention scores
 
-        # Compute the softmax scale
-        softmax_scale = head_dim**-0.5
-
-        # Compute the dot product scores
-        dot_product_scores = q @ k.transpose(-1, -2) * softmax_scale
-
-        # Create a causal mask
-        causal_mask = (
-            torch.tril(torch.ones(seqlen, seqlen, device=q.device))
-            .unsqueeze(0)
-            .unsqueeze(0)
-        )
-
-        # Mask the dot product scores
-        dot_product_scores_masked = dot_product_scores.masked_fill(
-            causal_mask == 0, float("-inf")
-        )
-
-        # Compute the attention scores
-        attention = torch.softmax(dot_product_scores_masked, dim=-1)
-
-        # Apply dropout to the attention scores
         attention_drop = F.dropout(attention, self.dropout_p if self.training else 0.0)
 
-        # Compute the output of the attention layer
-        output = torch.matmul(attention_drop, v)
+        output = # TODO: compute the output of the attention layer
 
         return output
+
 
 
 class MHA(nn.Module):
@@ -172,7 +150,7 @@ class MHA(nn.Module):
         self.head_dim = self.d_model // num_heads
 
         # TODO: below, create the query, key, and value projection layers
-        self.qkv_proj = nn.Linear(d_model, 3 * d_model)
+
         self.attn = SelfAttention(attention_dropout=dropout)
         self.out_proj = nn.Linear(d_model, d_model)
 
@@ -185,23 +163,12 @@ class MHA(nn.Module):
         """
         # TODO: constuct query, key, and value and pass them to the attention function
         # note the shape of qkv should be (B, S, 3, H, d)
-        batch_size, seqlen, _ = x.size()
-        # Construct query, key, and value and pass them to the attention function
-        qkv = self.qkv_proj(x)  # (B, S, 3 * D)
-        qkv = qkv.view(
-            batch_size, seqlen, 3, self.num_heads, self.head_dim
-        )  # (B, S, 3, H, d)
-        qkv = qkv.permute(0, 1, 2, 3, 4)  # (B, S, 3, H, d)
+        qkv =
 
         attention_output = self.attn(qkv, **kwargs)
 
         # compute the output projection over the attention output
-        attention_output = (
-            attention_output.permute(0, 2, 1, 3)
-            .contiguous()
-            .view(batch_size, seqlen, self.d_model)
-        )
-        out = self.out_proj(attention_output)
+        out = self.out_proj(# TODO: FILL IN HERE)
         return out
 
 

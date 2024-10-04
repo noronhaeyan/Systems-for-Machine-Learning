@@ -27,7 +27,7 @@ class LMSynthetic:
         input_seq_len,
         vocab_size,
         d_model=256,
-        num_heads=4,
+        num_heads=4,  ##TODO: Change number of heads here
         n_layers=4,
         train_data=None,
         test_data=None,

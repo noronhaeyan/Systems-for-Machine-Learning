@@ -25,3 +25,19 @@ $PYTHON_CMD src/experiments.py \
     --train_batch ${train_batch} \
     --input_seq_len ${input_seq_len} \
     --d_model ${d_model}
+
+# $PYTHON_CMD -m debugpy --listen 5678 src/experiments.py \
+#     --task ${dataset} \
+#     --epochs ${epochs} \
+#     --learning_rate ${lr} \
+#     --train_batch ${train_batch} \
+#     --input_seq_len ${input_seq_len} \
+#     --d_model ${d_model}
+
+# debugpy-run -p :5678 src/experiments.py -- \
+#     --task ${dataset} \
+#     --epochs ${epochs} \
+#     --learning_rate ${lr} \
+#     --train_batch ${train_batch} \
+#     --input_seq_len ${input_seq_len} \
+#     --d_model ${d_model}
