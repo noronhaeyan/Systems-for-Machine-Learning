@@ -323,6 +323,7 @@ class LMBackbone(nn.Module):
         )
         residual = None
         for layer in self.layers:
+
             hidden_states, residual = layer(hidden_states, residual)
         dropped = self.drop_f(hidden_states)
         residual = (dropped + residual) if residual is not None else dropped

@@ -8,7 +8,6 @@ import torch
 import tiktoken
 from model import GPTConfig, GPT, DEBUG
 import time, json
-import pdb
 
 # -----------------------------------------------------------------------------
 init_from = 'resume' # either 'resume' (from an out_dir) or a gpt2 variant (e.g. 'gpt2-xl')
@@ -25,7 +24,6 @@ seed = 1337
 batch_size = 32
 prompt_length = 64
 device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1', etc.
-#device = 'cpu'
 dtype = 'float32' if DEBUG else 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16' # 'float32' or 'bfloat16' or 'float16'
 compile = False # use PyTorch 2.0 to compile the model to be faster
 exec(open('configurator.py').read()) # overrides from command line or config file
@@ -202,7 +200,6 @@ print(f'[NAIVE] Generated {tokens_generated} tokens in {t1n-t0n:3f} seconds for 
 print(f'[KV]    Generated {tokens_generated} tokens in {t1k-t0k:3f} seconds for {tokens_generated/(t1k-t0k):3f} tok/sec.')
 if x.size(0) == 1: print(f'[SPEC]  Generated {tokens_generated} tokens in {t1s-t0s:3f} seconds for {tokens_generated/(t1s-t0s):3f} tok/sec.')
 
-#ipdb.set_trace()
 all_matched = True
 # generations_matching and generations_kv
 num_matching = len([1 for i in range(len(generations_naive)) if generations_naive[i] == generations_kv[i]])
