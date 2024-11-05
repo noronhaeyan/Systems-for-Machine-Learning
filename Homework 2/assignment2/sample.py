@@ -8,14 +8,14 @@ import torch
 import tiktoken
 from model import GPTConfig, GPT, DEBUG
 import time, json
-import pdb
+import ipdb
 
 # -----------------------------------------------------------------------------
 init_from = 'resume' # either 'resume' (from an out_dir) or a gpt2 variant (e.g. 'gpt2-xl')
 out_dir = 'out' # ignored if init_from is not 'resume'
 start = "\n" # or "<|endoftext|>" or etc. Can also specify a file, use as: "FILE:prompt.txt"
 num_samples = 3 # number of samples to draw
-num_warmup = 1 # how many warmups to do before benchmarking
+num_warmup = 4 # how many warmups to do before benchmarking
 max_new_tokens = 128 # number of tokens generated in each sample
 warmup_max_new_tokens = 4
 temperature = 0.4 # 1.0 = no change, < 1.0 = less random, > 1.0 = more random, in predictions
@@ -171,7 +171,8 @@ if x.size(0) == 1:
     draft_model.to(device)
     if compile:
         draft_model = torch.compile(draft_model) # requires PyTorch 2.0 (optional)
-    draft_model.enable_kv(True)
+    draft_model.enable_kv(False)
+    model.enable_kv(False)
     print('Finished loading draft model')
     # warmup
     print('Starting warmup')

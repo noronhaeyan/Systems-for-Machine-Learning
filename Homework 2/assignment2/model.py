@@ -8,10 +8,9 @@ https://github.com/huggingface/transformers/blob/main/src/transformers/models/gp
 """
 
 # For assignment #2, we've preset some flags that increase numerical determinism. Control them with this flag!
-DEBUG = True
-
+DEBUG = False
 import math
-import pdb
+import ipdb
 import inspect
 from dataclasses import dataclass
 
@@ -519,6 +518,7 @@ class GPT(nn.Module):
         the sequence max_new_tokens times, feeding the predictions back into the model each time.
         Most likely you'll want to make sure to be in model.eval() mode of operation for this.
         """
+        #ipdb.set_trace()
         for _ in range(max_new_tokens):
             # if the sequence context is growing too long we must crop it at block_size
             idx_cond = (
@@ -548,7 +548,7 @@ class GPT(nn.Module):
 
             # append sampled index to the running sequence and continue
             idx = torch.cat((idx, idx_next), dim=1)
-
+        #ipdb.set_trace()
         return idx
 
     @torch.no_grad()
@@ -560,8 +560,9 @@ class GPT(nn.Module):
         """
 
         # Generate the full KV cache and decode the first token
-
+        #ipdb.set_trace()
         new_tokens = torch.empty((idx.size(0), 0), device=idx.device, dtype=idx.dtype)
+        self.enable_kv(True)
 
         ### YOUR CODE HERE
         # run the idx through the forward pass to get the logits
@@ -613,7 +614,7 @@ class GPT(nn.Module):
             new_tokens = torch.cat((new_tokens, idx_next), dim=1)
 
             ### END YOUR CODE HERE
-
+        #ipdb.set_trace()
         return torch.cat((idx, new_tokens), dim=1)
 
     @torch.no_grad()
@@ -631,7 +632,7 @@ class GPT(nn.Module):
         the sequence max_new_tokens times, feeding the predictions back into the model each time.
         Most likely you'll want to make sure to be in model.eval() mode of operation for this.
         """
-
+        #ipdb.set_trace()
         self.enable_kv(
             False
         )  # disable KV cache for the main model -- it's not worth the effort
@@ -668,7 +669,7 @@ class GPT(nn.Module):
             # iterate from the end position of idx_cond (prefix sequence) to the end position of idx_speculative (generated sequence)
             for i in range(idx_cond.size(1), idx_speculative.size(1)):
                 # pluck the logits at the current position and scale by desired temperature
-                logits = all_logits[:, i, :] / temperature
+                logits = all_logits[:, i-1, :] / temperature
 
                 # optionally crop the logits to only the top k options
                 if top_k is not None:
@@ -694,6 +695,6 @@ class GPT(nn.Module):
                     break
 
             ### END YOUR CODE HERE
-
+        #ipdb.set_trace()
         print(f"speculative decoding ran for {loop_counter} iterations")
         return idx[:,:idx_length_original+max_new_tokens]
