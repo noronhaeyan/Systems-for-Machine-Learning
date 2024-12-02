@@ -2,7 +2,6 @@ import arxiv
 from datetime import datetime, timedelta
 import pytz
 import requests
-import numpy as np
 
 
 def print_papers(papers):
