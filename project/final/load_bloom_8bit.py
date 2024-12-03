@@ -18,7 +18,7 @@ model = AutoModelForCausalLM.from_pretrained(model_name)
 # Move model to MPS if available, otherwise to CPU
 #device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = model.to(device)
+#model = model.to(device)
 
 # Define a sample prompt
 prompt = "How can I improve my productivity while working from home?"
